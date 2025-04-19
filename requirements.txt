@@ -1,0 +1,5 @@
+streamlit 
+transformers 
+bertopic 
+feedparser 
+python-dotenv
