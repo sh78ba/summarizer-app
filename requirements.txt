@@ -1,22 +1,7 @@
 streamlit==1.31.1
 transformers==4.38.0
 torch==1.13.1  # Compatible version for Python 3.9
-sentence-transformers==2.2.0  # This is a compatible version for Python 3.9
 bertopic==0.17.0
-hdbscan==0.8.40
-scikit-learn==1.0.2  # A compatible version with Python 3.9
-pandas==1.5.3  # This version works with Python 3.9
-numpy==1.21.6  # Compatible version for Python 3.9
-requests==2.32.3
 feedparser==6.0.11
-pyyaml==6.0.2
-python-dotenv==1.1.0
-altair==4.2.2  # Compatible version for Python 3.9
-plotly==5.10.0  # Compatible with Python 3.9
-pydeck==0.9.1
-protobuf==3.20.0  # A version that's compatible with Python 3.9
-regex==2022.3.15  # Compatible with Python 3.9
-tqdm==4.62.3  # Works with Python 3.9
-jinja2==3.1.6
-watchdog==2.1.7  # Compatible version with Python 3.9
-packaging==21.3  # Compatible version with Python 3.9
+requests==2.32.3
+python-dotenv==1.1.0  # For environment variable handling
