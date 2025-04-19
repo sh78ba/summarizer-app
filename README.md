@@ -52,3 +52,11 @@ streamlit run app.py
 ## Live Link
 https://summarizer-app-7bxbyjiv6u5mvkrhhwmzzv.streamlit.app
 
+
+## Images
+
+![Image](images/summerizer.png)
+
+
+![Image2](images/summerizer-2.png)
+
