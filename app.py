@@ -1,7 +1,5 @@
-
 import streamlit as st
 from transformers import pipeline
-from bertopic import BERTopic
 import feedparser
 import requests
 import random
@@ -19,21 +17,13 @@ st.title("📰 Personalized/News Summarizer")
 def load_summarizer():
     return pipeline("summarization", model="facebook/bart-large-cnn")
 
-@st.cache_resource
-def load_topic_model():
-    return BERTopic(embedding_model="all-MiniLM-L6-v2")
-
 summarizer = load_summarizer()
-topic_model = load_topic_model()
 
 # -------------------------------
 # 3. Fetch Articles from RSS Feed
 # -------------------------------
 def fetch_articles(url, user_agent):
-    headers = {
-        "User-Agent": user_agent
-    }
-
+    headers = {"User-Agent": user_agent}
     try:
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
@@ -42,13 +32,11 @@ def fetch_articles(url, user_agent):
 
         if feed.bozo:
             st.warning(f"⚠️ Feed parse warning: {feed.bozo_exception}")
-
         if not feed.entries:
             st.error("❌ No entries found in the RSS feed.")
             return []
 
         return [{"title": entry.title, "content": entry.summary} for entry in feed.entries[:10]]
-
     except requests.exceptions.RequestException as e:
         st.error(f"❌ Failed to fetch RSS feed: {e}")
         return []
@@ -65,31 +53,28 @@ with st.sidebar:
 # 5. Input Tabs: RSS Feed or Custom Text
 # -------------------------------
 tab1, tab2 = st.tabs(["📡 RSS Feed", "📝 Custom Text"])
-articles = []
 
-# Filter articles based on user interests
+# -------------------------------
+# Helper: Filter Articles by Interests
+# -------------------------------
 def filter_articles_by_interests(raw_articles, interests):
-    interests = [kw.strip().lower() for kw in interests.split(",")]
-    filtered_articles = [
+    keywords = [kw.strip().lower() for kw in interests.split(",")]
+    return [
         article for article in raw_articles
-        if any(kw in article["title"].lower() or kw in article["content"].lower() for kw in interests)
+        if any(kw in article["title"].lower() or kw in article["content"].lower() for kw in keywords)
     ]
-    return filtered_articles
 
 # -------------------------------
 # 6. Tab 1: RSS Feed
 # -------------------------------
 with tab1:
     rss_url = st.text_input("Enter RSS Feed URL", "https://auto.hindustantimes.com/rss/latest-news")
-    
-    # List of User-Agents (internally defined)
+
     user_agent_list = [
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Firefox/89.0 Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/91.0.864.67 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/89.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/91.0.864.67"
     ]
-    
-    # Randomly select a User-Agent internally
     user_agent = random.choice(user_agent_list)
 
     if rss_url:
@@ -133,4 +118,3 @@ with tab2:
         )
         st.subheader("Summary")
         st.write(summary[0]["summary_text"])
-
